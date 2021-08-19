@@ -126,3 +126,19 @@ function wcpay_show_old_jetpack_notice() {
 	</div>
 	<?php
 }
+
+/**
+ * Adapted from https://github.com/senadir/helper-headless-plugin/blob/trunk/includes/cors.php .
+ *
+ * @param {boolean} $served Whether the request has already been served.
+ */
+function wcpay_disable_cors( $served ) {
+	$woopay_origin = 'http://localhost:8086';
+	header( 'Access-Control-Allow-Origin: ' . $woopay_origin );
+	header( 'Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTION' );
+	header( 'Access-Control-Allow-Credentials: true' );
+	header( 'Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, X-WC-Store-API-Nonce' );
+	header( 'Access-Control-Expose-Headers: X-WC-Store-API-Nonce, X-WC-Store-API-Nonce-Timestamp' );
+	return $served;
+}
+add_action( 'rest_pre_serve_request', 'wcpay_disable_cors' );
